@@ -5,7 +5,7 @@ Program to help enumerate and exploit MSSQL servers. This tools was made as an a
 
 ```bash
 ./mssqlcli
-mssqlcli v0.1
+mssqlcli v0.2
 
   -database string
         Database to connect to (default "master")
@@ -15,12 +15,17 @@ mssqlcli v0.1
         Host to connect to
   -method string
         Run a specific method
-        check           :       Only check if the credentials work
-        interact        :       Interactive mode
-        currentuser     :       Get the current user
-        isadmin         :       Check if you are running as a sysadmin
-        systemuser      :       Get the system user
-        version         :       Get the version of the database server
+        check                   :       Only check if the credentials work
+        interact                :       Interactive mode
+        currentuser             :       Get the current user
+        databases               :       List databases
+        impersonate             :       List users you can impersonate
+        isadmin                 :       Check if you are running as a sysadmin
+        linkedservers           :       List linked servers
+        listusers               :       List all users
+        systemuser              :       Get the system user
+        tde                     :       Check if TDE is enabled
+        version                 :       Get the version of the database server
          (default "interact")
   -password string
         Password
