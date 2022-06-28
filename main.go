@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	version = "0.1"
+	version = "0.2"
 )
 
 func (d *DatabaseConnection) interactive() {
@@ -28,14 +28,33 @@ func (d *DatabaseConnection) interactive() {
 		l := strings.ToLower(i)
 		if l == "currentuser" {
 			d.GetCurrentUser()
+		} else if l == "databases" {
+			d.ListDatabases()
+		} else if l == "disable_xp_cmdshell" {
+			d.DisableXPCmdShell()
+		} else if l == "enable_xp_cmdshell" {
+			d.EnableXPCmdShell()
 		} else if l == "exit" {
 			break
 		} else if l == "help" {
 			h := printOptions()
 			fmt.Printf(h)
-			fmt.Printf("%s\t\t:\t%s\n", "exit", "Exit the program")
+			fmt.Printf("%s\t:\t%s\n", "disable_xp_cmdshell", "Disable the xp_cmd_shell stored procedure")
+			fmt.Printf("%s\t:\t%s\n", "enable_xp_cmdshell", "Enable the xp_cmd_shell stored procedure")
+			fmt.Printf("%s\t\t:\t%s\n", "tracelog", "List all traces")
+			fmt.Printf("%s\t\t\t:\t%s\n", "exit", "Exit the program")
+		} else if l == "impersonate" {
+			d.ListImpersonations()
 		} else if l == "isadmin" {
 			d.IsSysadmin()
+		} else if l == "linkedservers" {
+			d.LinkedServers()
+		} else if l == "listusers" {
+			d.ListUsers()
+		} else if l == "tde" {
+			d.CheckTDE()
+		} else if l == "tracelog" {
+			d.ListTraces()
 		} else if l == "systemuser" {
 			d.GetSystemUser()
 		} else if l == "version" {
@@ -50,12 +69,17 @@ func (d *DatabaseConnection) interactive() {
 
 func printOptions() string {
 	var r string
-	a1 := fmt.Sprintf("%s\t:\t%s\n", "currentuser", "Get the current user")
-	a2 := fmt.Sprintf("%s\t\t:\t%s\n", "isadmin", "Check if you are running as a sysadmin")
-	a3 := fmt.Sprintf("%s\t:\t%s\n", "systemuser", "Get the system user")
-	a4 := fmt.Sprintf("%s\t\t:\t%s\n", "version", "Get the version of the database server")
+	a1 := fmt.Sprintf("%s\t\t:\t%s\n", "currentuser", "Get the current user")
+	a2 := fmt.Sprintf("%s\t\t:\t%s\n", "databases", "List databases")
+	a3 := fmt.Sprintf("%s\t\t:\t%s\n", "impersonate", "List users you can impersonate")
+	a4 := fmt.Sprintf("%s\t\t\t:\t%s\n", "isadmin", "Check if you are running as a sysadmin")
+	a5 := fmt.Sprintf("%s\t\t:\t%s\n", "linkedservers", "List linked servers")
+	a6 := fmt.Sprintf("%s\t\t:\t%s\n", "listusers", "List all users")
+	a7 := fmt.Sprintf("%s\t\t:\t%s\n", "systemuser", "Get the system user")
+	a8 := fmt.Sprintf("%s\t\t\t:\t%s\n", "tde", "Check if TDE is enabled")
+	a9 := fmt.Sprintf("%s\t\t\t:\t%s\n", "version", "Get the version of the database server")
 
-	r = a1 + a2 + a3 + a4
+	r = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9
 
 	return r
 }
@@ -70,8 +94,8 @@ func printDefaults(s string) {
 func main() {
 	var db DatabaseConnection
 
-	interact := fmt.Sprintf("%s\t:\t%s\n", "interact", "Interactive mode")
-	check := fmt.Sprintf("%s\t\t:\t%s\n", "check", "Only check if the credentials work")
+	interact := fmt.Sprintf("%s\t\t:\t%s\n", "interact", "Interactive mode")
+	check := fmt.Sprintf("%s\t\t\t:\t%s\n", "check", "Only check if the credentials work")
 
 	flag.StringVar(&db.database, "database", "master", "Database to connect to")
 	flag.BoolVar(&db.debug, "debug", false, "Print information such as the SQL commands being executed")
@@ -104,18 +128,24 @@ func main() {
 	if m == "check" {
 		// do nothing since we already tried connecting
 	} else if m == "currentuser" {
-		fmt.Printf("[+] Curent user: ")
 		db.GetCurrentUser()
+	} else if m == "databases" {
+		db.ListDatabases()
+	} else if m == "impersonate" {
+		db.ListImpersonations()
 	} else if m == "interact" {
 		db.interactive()
 	} else if m == "isadmin" {
-		fmt.Printf("[+] Is sysadmin: ")
 		db.IsSysadmin()
+	} else if m == "linkedservers" {
+		db.LinkedServers()
+	} else if m == "listusers" {
+		db.ListUsers()
 	} else if m == "systemuser" {
-		fmt.Printf("[+] System user: ")
-		db.GetCurrentUser()
+		db.GetSystemUser()
+	} else if m == "tde" {
+		db.CheckTDE()
 	} else if m == "version" {
-		fmt.Printf("[+] Version: ")
 		db.GetVersion()
 	} else {
 		printDefaults("Invalid method provided")
