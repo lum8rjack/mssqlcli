@@ -68,11 +68,19 @@ Running in interactive mode to execute the built-in commands and raw SQL queries
 ./mssqlcli -user sa -password "Password123" -host 127.0.0.1
 [+] Successfully connect to 127.0.0.1:1433 (database: master) as 'sa'
 mssqlcli > help
-currentuser     :       Get the current user
-isadmin         :       Check if you are running as a sysadmin
-systemuser      :       Get the system user
-version         :       Get the version of the database server
-exit            :       Exit the program
+currentuser             :       Get the current user
+databases               :       List databases
+impersonate             :       List users you can impersonate
+isadmin                 :       Check if you are running as a sysadmin
+linkedservers           :       List linked servers
+listusers               :       List all users
+systemuser              :       Get the system user
+tde                     :       Check if TDE is enabled
+version                 :       Get the version of the database server
+disable_xp_cmdshell     :       Disable the xp_cmd_shell stored procedure
+enable_xp_cmdshell      :       Enable the xp_cmd_shell stored procedure
+tracelog                :       List all traces
+exit                    :       Exit the program
 mssqlcli > currentuser
 dbo
 mssqlcli > isadmin
